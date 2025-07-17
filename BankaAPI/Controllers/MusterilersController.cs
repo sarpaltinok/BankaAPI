@@ -39,6 +39,23 @@ namespace BankaAPI.Controllers
             return musteri;
         }
 
+        // GET: api/Musteriler/sube/
+        [HttpGet("sube/{subeAdi}")]
+        public async Task<ActionResult<IEnumerable<Musteri>>> GetMusterilerBySube(string subeAdi)
+        {
+            var musteriler = await _context.Musteriler
+                .FromSqlRaw("EXEC MusteriGetirBySube @p0", subeAdi)
+                .ToListAsync();
+
+            if (musteriler == null || !musteriler.Any())
+            {
+                return NotFound($"'{subeAdi}' şubesine ait müşteri bulunamadı.");
+            }
+
+            return musteriler;
+        }
+
+
         // PUT: api/Musteriler/5
         [HttpPut("{musteriNo}")]
         public async Task<IActionResult> PutMusteri(int musteriNo, Musteri musteri)
