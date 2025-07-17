@@ -18,38 +18,37 @@ namespace BankaAPI.Controllers
 
         public MusterilerController(Data.BankaDbContext context) => _context = context;
 
-        // GET: api/Musterilers
+        // GET: api/Musteriler
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Musteriler>>> GetMusteriler()
+        public async Task<ActionResult<IEnumerable<Musteri>>> GetMusteriler()
         {
             return await _context.Musteriler.ToListAsync();
         }
 
-        // GET: api/Musterilers/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Musteriler>> GetMusteriler(int id)
+        // GET: api/Musteriler/5
+        [HttpGet("{musteriNo}")]
+        public async Task<ActionResult<Musteri>> GetMusteri(int musteriNo)
         {
-            var musteriler = await _context.Musteriler.FindAsync(id);
+            var musteri = await _context.Musteriler.FindAsync(musteriNo);
 
-            if (musteriler == null)
+            if (musteri == null)
             {
                 return NotFound();
             }
 
-            return musteriler;
+            return musteri;
         }
 
-        // PUT: api/Musterilers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMusteriler(int id, Musteriler musteriler)
+        // PUT: api/Musteriler/5
+        [HttpPut("{musteriNo}")]
+        public async Task<IActionResult> PutMusteri(int musteriNo, Musteri musteri)
         {
-            if (id != musteriler.MusteriNo)
+            if (musteriNo != musteri.MusteriNo)
             {
                 return BadRequest();
             }
 
-            _context.Entry(musteriler).State = EntityState.Modified;
+            _context.Entry(musteri).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +56,7 @@ namespace BankaAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!MusterilerExists(id))
+                if (!MusteriExists(musteriNo))
                 {
                     return NotFound();
                 }
@@ -69,37 +68,56 @@ namespace BankaAPI.Controllers
 
             return NoContent();
         }
-
-        // POST: api/Musterilers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Musteriler>> PostMusteriler(Musteriler musteriler)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Musteri>> PostMusteri(Musteri musteri)
         {
-            _context.Musteriler.Add(musteriler);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Aynı telefon numarasına sahip müşteri var mı kontrol et
+            bool musteriVarMi = await _context.Musteriler
+                .AnyAsync(m => m.Telefon == musteri.Telefon);
+
+            if (musteriVarMi)
+            {
+                return BadRequest("Bu telefon numarasına sahip bir müşteri zaten kayıtlı.");
+            }
+
+            // Kayıt tarihi ata
+            musteri.KayitTarihi = DateTime.Now;
+
+            _context.Musteriler.Add(musteri);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMusteriler", new { id = musteriler.MusteriNo }, musteriler);
+            return CreatedAtAction(nameof(GetMusteri), new { musteriNo = musteri.MusteriNo }, musteri);
         }
 
-        // DELETE: api/Musterilers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMusteriler(int id)
+
+
+        // DELETE: api/Musteriler/5
+        [HttpDelete("{musteriNo}")]
+        public async Task<IActionResult> DeleteMusteri(int musteriNo)
         {
-            var musteriler = await _context.Musteriler.FindAsync(id);
-            if (musteriler == null)
+            var musteri = await _context.Musteriler.FindAsync(musteriNo);
+            if (musteri == null)
             {
                 return NotFound();
             }
 
-            _context.Musteriler.Remove(musteriler);
+            _context.Musteriler.Remove(musteri);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool MusterilerExists(int id)
+        // helper method
+        private bool MusteriExists(int musteriNo)
         {
-            return _context.Musteriler.Any(e => e.MusteriNo == id);
+            return _context.Musteriler.Any(e => e.MusteriNo == musteriNo);
         }
     }
 }

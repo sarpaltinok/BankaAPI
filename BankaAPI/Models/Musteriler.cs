@@ -21,9 +21,9 @@ public partial class Musteri
 
     public string? Cinsiyet { get; set; }
 
-    public DateOnly? DogumTarihi { get; set; }
+    public DateTime? DogumTarihi { get; set; }
 
-    public DateOnly? KayitTarihi { get; set; }
+    public DateTime? KayitTarihi { get; set; } 
 
     public decimal? KrediTutari { get; set; }
 

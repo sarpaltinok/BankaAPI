@@ -15,7 +15,7 @@ public partial class BankaDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Musteriler> Musteriler { get; set; }
+    public virtual DbSet<Musteri> Musteriler { get; set; }
 
     public virtual DbSet<OdemeLog> OdemeLogs { get; set; }
 
@@ -26,7 +26,7 @@ public partial class BankaDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Musteriler>(entity =>
+        modelBuilder.Entity<Musteri>(entity =>
         {
             entity.HasKey(e => e.MusteriNo).HasName("PK__Musteril__72627C22DC9A5328");
 
@@ -41,7 +41,7 @@ public partial class BankaDbContext : DbContext
             entity.Property(e => e.Telefon).HasMaxLength(15);
         });
 
-        modelBuilder.Entity<OdemeLog>(entity =>
+        modelBuilder.Entity<OdemeLog>(static entity =>
         {
             entity.HasKey(e => e.LogId).HasName("PK__OdemeLog__5E5499A8071D15AD");
 

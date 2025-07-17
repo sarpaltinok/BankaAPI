@@ -17,5 +17,5 @@ public partial class OdemeLog
 
     public string? Aciklama { get; set; }
 
-    public virtual Musteriler? MusteriNoNavigation { get; set; }
+    public virtual Musteri? MusteriNoNavigation { get; set; }
 }
