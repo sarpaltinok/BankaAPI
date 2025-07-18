@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BankaAPI.Models;
 using BankaAPI.Data;
+using BankaAPI.Dtos;
+using BankaAPI.DTOs;
 
 namespace BankaAPI.Controllers
 {
@@ -20,30 +22,60 @@ namespace BankaAPI.Controllers
 
         // GET: api/Musteriler
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Musteri>>> GetMusteriler()
+        public async Task<ActionResult<IEnumerable<MusteriOkuDto>>> GetMusteriler()   //Burdan başla
         {
-            return await _context.Musteriler.ToListAsync();
+            var musteriler = await _context.Musteriler.ToListAsync();
+
+            var dtoList = musteriler.Select(m => new MusteriOkuDto
+            {
+                MusteriNo = m.MusteriNo,
+                Ad = m.Ad,
+                Soyad = m.Soyad,
+                Telefon = m.Telefon,
+                Sube = m.Sube,
+                KrediNotu = m.KrediNotu,
+                Cinsiyet = m.Cinsiyet,
+                DogumTarihi = m.DogumTarihi,
+                KayitTarihi = m.KayitTarihi,
+                KrediTutari = m.KrediTutari
+            });
+
+            return Ok(dtoList);
         }
 
 
 
         // GET: api/Musteriler/5
         [HttpGet("{musteriNo}")]
-        public async Task<ActionResult<Musteri>> GetMusteri(int musteriNo)
+        public async Task<ActionResult<MusteriOkuDto>> GetMusteri(int musteriNo)
         {
             var musteri = await _context.Musteriler.FindAsync(musteriNo);
 
-            if (musteri == null)
-            {
-                return NotFound();
-            }
+            if (musteri == null) return NotFound();
 
-            return musteri;
+            var dto = new MusteriOkuDto
+            {
+                MusteriNo = musteri.MusteriNo,
+                Ad = musteri.Ad,
+                Soyad = musteri.Soyad,
+                Telefon = musteri.Telefon,
+                Sube = musteri.Sube,
+                KrediNotu = musteri.KrediNotu,
+                Cinsiyet = musteri.Cinsiyet,
+                DogumTarihi = musteri.DogumTarihi,
+                KayitTarihi = musteri.KayitTarihi,
+                KrediTutari = musteri.KrediTutari
+            };
+
+            return Ok(dto);
         }
+
 
         // GET: api/Musteriler/sube/
         [HttpGet("sube/{subeAdi}")]
-        public async Task<ActionResult<IEnumerable<Musteri>>> GetMusterilerBySube(string subeAdi)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<MusteriOkuDto>>> GetMusterilerBySube(string subeAdi)
         {
             var musteriler = await _context.Musteriler
                 .FromSqlRaw("EXEC MusteriGetirBySube @p0", subeAdi)
@@ -54,43 +86,53 @@ namespace BankaAPI.Controllers
                 return NotFound($"'{subeAdi}' şubesine ait müşteri bulunamadı.");
             }
 
-            return musteriler;
+            var musteriDtoList = musteriler.Select(m => new MusteriOkuDto
+            {
+                Ad = m.Ad,
+                Soyad = m.Soyad,
+                Telefon = m.Telefon,
+                KrediNotu = m.KrediNotu,
+                Cinsiyet = m.Cinsiyet,
+                DogumTarihi = m.DogumTarihi,
+                KayitTarihi = m.KayitTarihi,
+                KrediTutari = m.KrediTutari
+            }).ToList();
+
+            return Ok(musteriDtoList);
         }
+
 
 
         // PUT: api/Musteriler/5
         [HttpPut("{musteriNo}")]
-        public async Task<IActionResult> PutMusteri(int musteriNo, Musteri musteri)
+        public async Task<IActionResult> PutMusteri(int musteriNo, MusteriGuncelleDto MusteriGuncelleDto)
         {
-            if (musteriNo != musteri.MusteriNo)
-            {
-                return BadRequest();
-            }
+            if (musteriNo != MusteriGuncelleDto.MusteriNo) return BadRequest();         
 
-            _context.Entry(musteri).State = EntityState.Modified;
+            var musteri = await _context.Musteriler.FindAsync(musteriNo);
+            if (musteri == null) return NotFound();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MusteriExists(musteriNo))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            musteri.Ad = MusteriGuncelleDto.Ad;
+            musteri.Soyad = MusteriGuncelleDto.Soyad;
+            musteri.Telefon = MusteriGuncelleDto.Telefon;
+            musteri.Sube = MusteriGuncelleDto.Sube;
+            musteri.KrediNotu = MusteriGuncelleDto.KrediNotu;
+            musteri.Cinsiyet = MusteriGuncelleDto.Cinsiyet;
+            musteri.DogumTarihi = MusteriGuncelleDto.DogumTarihi;
+            musteri.KrediTutari = MusteriGuncelleDto.KrediTutari;
+
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
+
+
+        //POST
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Musteri>> PostMusteri(Musteri musteri)
+        public async Task<ActionResult<Musteri>> PostMusteri(MusteriGuncelleDto musteriGuncelleDto)
         {
             if (!ModelState.IsValid)
             {
@@ -99,20 +141,30 @@ namespace BankaAPI.Controllers
 
             // Aynı telefon numarasına sahip müşteri var mı kontrol et
             bool musteriVarMi = await _context.Musteriler
-                .AnyAsync(m => m.Telefon == musteri.Telefon);
+                .AnyAsync(m => m.Telefon == musteriGuncelleDto.Telefon);
 
             if (musteriVarMi)
             {
                 return BadRequest("Bu telefon numarasına sahip bir müşteri zaten kayıtlı.");
             }
 
-            // Kayıt tarihi ata
-            musteri.KayitTarihi = DateTime.Now;
-
+            var musteri = new Musteri
+            {
+                Ad = musteriGuncelleDto.Ad,
+                Soyad = musteriGuncelleDto.Soyad,
+                Telefon = musteriGuncelleDto.Telefon,
+                Sube = musteriGuncelleDto.Sube,
+                KrediNotu = musteriGuncelleDto.KrediNotu,
+                Cinsiyet = musteriGuncelleDto.Cinsiyet,
+                DogumTarihi = musteriGuncelleDto.DogumTarihi,
+                KrediTutari = musteriGuncelleDto.KrediTutari
+            };
+            // Veritabanına ekle
             _context.Musteriler.Add(musteri);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetMusteri), new { musteriNo = musteri.MusteriNo }, musteri);
+            // 201 Created döndür ve yeni müşteri bilgisini geri ver
+            return CreatedAtAction(nameof(GetMusteri), new { id = musteri.MusteriNo }, musteri);
         }
 
 
