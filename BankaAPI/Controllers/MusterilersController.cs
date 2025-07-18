@@ -157,7 +157,8 @@ namespace BankaAPI.Controllers
                 KrediNotu = musteriGuncelleDto.KrediNotu,
                 Cinsiyet = musteriGuncelleDto.Cinsiyet,
                 DogumTarihi = musteriGuncelleDto.DogumTarihi,
-                KrediTutari = musteriGuncelleDto.KrediTutari
+                KrediTutari = musteriGuncelleDto.KrediTutari,
+                KayitTarihi = musteriGuncelleDto.KayitTarihi        //Burda eklemeyi denedim ama olmadı
             };
             // Veritabanına ekle
             _context.Musteriler.Add(musteri);
