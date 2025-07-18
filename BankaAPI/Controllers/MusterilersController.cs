@@ -25,6 +25,8 @@ namespace BankaAPI.Controllers
             return await _context.Musteriler.ToListAsync();
         }
 
+
+
         // GET: api/Musteriler/5
         [HttpGet("{musteriNo}")]
         public async Task<ActionResult<Musteri>> GetMusteri(int musteriNo)
