@@ -9,6 +9,7 @@ using BankaAPI.Models;
 using BankaAPI.Data;
 using BankaAPI.Dtos;
 using BankaAPI.DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace BankaAPI.Controllers
 {
@@ -107,8 +108,6 @@ namespace BankaAPI.Controllers
         [HttpPut("{musteriNo}")]
         public async Task<IActionResult> PutMusteri(int musteriNo, MusteriGuncelleDto MusteriGuncelleDto)
         {
-            if (musteriNo != MusteriGuncelleDto.MusteriNo) return BadRequest();         
-
             var musteri = await _context.Musteriler.FindAsync(musteriNo);
             if (musteri == null) return NotFound();
 
@@ -158,14 +157,14 @@ namespace BankaAPI.Controllers
                 Cinsiyet = musteriGuncelleDto.Cinsiyet,
                 DogumTarihi = musteriGuncelleDto.DogumTarihi,
                 KrediTutari = musteriGuncelleDto.KrediTutari,
-                KayitTarihi = musteriGuncelleDto.KayitTarihi        //Burda eklemeyi denedim ama olmadı
+                KayitTarihi = musteriGuncelleDto.KayitTarihi      
             };
             // Veritabanına ekle
             _context.Musteriler.Add(musteri);
             await _context.SaveChangesAsync();
 
             // 201 Created döndür ve yeni müşteri bilgisini geri ver
-            return CreatedAtAction(nameof(GetMusteri), new { id = musteri.MusteriNo }, musteri);
+            return CreatedAtAction(nameof(GetMusteri), new { musteriNo = musteri.MusteriNo }, musteriGuncelleDto);
         }
 
 
