@@ -15,7 +15,7 @@ public partial class Odemeler
 
     public decimal? GuncelBorcTutari { get; set; }
 
-    public DateOnly? SonOdemeTarihi { get; set; }
+    public DateOnly? SonOdemeTarihi { get; set; } 
 
     public decimal? GecikmisBorcTutari { get; set; }
 
