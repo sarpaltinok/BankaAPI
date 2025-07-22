@@ -17,9 +17,9 @@ namespace BankaAPI.Controllers
     [ApiController]
     public class MusterilerController : ControllerBase
     {
-        private readonly Data.BankaDbContext _context;
+        private readonly BankaDbContext _context;
 
-        public MusterilerController(Data.BankaDbContext context) => _context = context;
+        public MusterilerController(BankaDbContext context) => _context = context;
 
         // GET: api/Musteriler
         [HttpGet]

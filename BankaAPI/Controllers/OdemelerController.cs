@@ -14,9 +14,9 @@ namespace BankaAPI.Controllers
     [ApiController]
     public class OdemelerController : ControllerBase
     {
-        private readonly Data.BankaDbContext _context;
+        private readonly BankaDbContext _context;
 
-        public OdemelerController(Data.BankaDbContext context)
+        public OdemelerController(BankaDbContext context)
         {
             _context = context;
         }
