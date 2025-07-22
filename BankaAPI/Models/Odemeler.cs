@@ -15,11 +15,11 @@ public partial class Odemeler
 
     public decimal? GuncelBorcTutari { get; set; }
 
-    public DateOnly? SonOdemeTarihi { get; set; } 
+    public DateTime? SonOdemeTarihi { get; set; } 
 
     public decimal? GecikmisBorcTutari { get; set; }
 
     public decimal? OdenmisBorcTutari { get; set; }
 
-    public virtual Musteri? MusteriNoNavigation { get; set; }
+    //public virtual Musteri? MusteriNoNavigation { get; set; }   //Sil
 }

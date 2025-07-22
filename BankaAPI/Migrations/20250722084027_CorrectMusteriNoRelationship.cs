@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BankaAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddOdemelerTable : Migration
+    public partial class CorrectMusteriNoRelationship : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,19 +41,19 @@ namespace BankaAPI.Migrations
                     MusteriNo = table.Column<int>(type: "int", nullable: true),
                     GuncelOdemeTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     GuncelBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    SonOdemeTarihi = table.Column<DateOnly>(type: "date", nullable: true),
+                    SonOdemeTarihi = table.Column<DateTime>(type: "date", nullable: true),
                     GecikmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    OdenmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    MusteriNoNavigationMusteriNo = table.Column<int>(type: "int", nullable: true)
+                    OdenmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Odemeler", x => x.OdemeId);
                     table.ForeignKey(
-                        name: "FK_Odemeler_Musteriler_MusteriNoNavigationMusteriNo",
-                        column: x => x.MusteriNoNavigationMusteriNo,
+                        name: "FK_Odemeler_Musteriler_MusteriNo",
+                        column: x => x.MusteriNo,
                         principalTable: "Musteriler",
-                        principalColumn: "MusteriNo");
+                        principalColumn: "MusteriNo",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,9 +79,9 @@ namespace BankaAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Odemeler_MusteriNoNavigationMusteriNo",
+                name: "IX_Odemeler_MusteriNo",
                 table: "Odemeler",
-                column: "MusteriNoNavigationMusteriNo");
+                column: "MusteriNo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OdemeLoglari_MusteriNoNavigationMusteriNo",

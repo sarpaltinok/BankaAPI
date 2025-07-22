@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankaAPI.Migrations
 {
     [DbContext(typeof(BankaDbContext))]
-    [Migration("20250722070510_AddOdemelerTable")]
-    partial class AddOdemelerTable
+    [Migration("20250722084027_CorrectMusteriNoRelationship")]
+    partial class CorrectMusteriNoRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,18 +115,15 @@ namespace BankaAPI.Migrations
                     b.Property<int?>("MusteriNo")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MusteriNoNavigationMusteriNo")
-                        .HasColumnType("int");
-
                     b.Property<decimal?>("OdenmisBorcTutari")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateOnly?>("SonOdemeTarihi")
+                    b.Property<DateTime?>("SonOdemeTarihi")
                         .HasColumnType("date");
 
                     b.HasKey("OdemeId");
 
-                    b.HasIndex("MusteriNoNavigationMusteriNo");
+                    b.HasIndex("MusteriNo");
 
                     b.ToTable("Odemeler");
                 });
@@ -142,11 +139,10 @@ namespace BankaAPI.Migrations
 
             modelBuilder.Entity("BankaAPI.Models.Odemeler", b =>
                 {
-                    b.HasOne("BankaAPI.Models.Musteri", "MusteriNoNavigation")
+                    b.HasOne("BankaAPI.Models.Musteri", null)
                         .WithMany("Odemelers")
-                        .HasForeignKey("MusteriNoNavigationMusteriNo");
-
-                    b.Navigation("MusteriNoNavigation");
+                        .HasForeignKey("MusteriNo")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("BankaAPI.Models.Musteri", b =>
