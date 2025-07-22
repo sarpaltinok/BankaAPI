@@ -55,7 +55,16 @@ namespace BankaAPI.Controllers
             _context.Entry(odemeler).State = EntityState.Modified;
 
             try
-            {
+            { 
+                // Insert Into Log Table 
+                var log = new OdemeLog
+                {
+                    MusteriNo = odemeler.MusteriNo,
+                    OdemeTutari = odemeler.GuncelOdemeTutari,
+                    OdemeTarihi = DateTime.Now,
+                    Aciklama = "Ödeme bilgileri güncellendi"
+                };
+                _context.OdemeLoglari.Add(log);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -78,7 +87,17 @@ namespace BankaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Odemeler>> PostOdemeler(Odemeler odemeler)
         {
-            _context.Odemeler.Add(odemeler);
+            _context.Odemeler.Add(odemeler);           
+            // Insert Into log table
+            var log = new OdemeLog
+            {
+                MusteriNo = odemeler.MusteriNo,
+                OdemeTutari = odemeler.GuncelOdemeTutari,
+                OdemeTarihi = DateTime.Now,
+                Aciklama = "Yeni ödeme oluşturuldu"
+            };
+            _context.OdemeLoglari.Add(log);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetOdemeler", new { id = odemeler.OdemeId }, odemeler);
