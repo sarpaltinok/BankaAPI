@@ -20,6 +20,6 @@ namespace BankaAPI.DTOs
 
         public decimal? OdenmisBorcTutari { get; set; }
 
-        public virtual Musteri? MusteriNoNavigation { get; set; }
+       // public virtual Musteri? MusteriNoNavigation { get; set; }
     }
 }

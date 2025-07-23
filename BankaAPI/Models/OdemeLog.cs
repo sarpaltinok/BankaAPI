@@ -16,6 +16,4 @@ public partial class OdemeLog
     public DateTime? OdemeTarihi { get; set; }
 
     public string? Aciklama { get; set; }
-
-    public virtual Musteri? MusteriNoNavigation { get; set; }
 }

@@ -26,7 +26,7 @@ namespace BankaAPI.Data
                 entity.Property(m => m.KrediTutari)
                     .HasColumnType("decimal(18,2)");
 
-                // Diğer konfigürasyonlar...
+                // Diğer konfigürasyonlar buraya eklenebilir
             });
 
             // Odemeler entity konfigürasyonu
