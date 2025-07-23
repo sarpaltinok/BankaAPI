@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BankaAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class CorrectMusteriNoRelationship : Migration
+    public partial class FixNavigationProps : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,7 +41,7 @@ namespace BankaAPI.Migrations
                     MusteriNo = table.Column<int>(type: "int", nullable: true),
                     GuncelOdemeTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     GuncelBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    SonOdemeTarihi = table.Column<DateTime>(type: "date", nullable: true),
+                    SonOdemeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
                     GecikmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     OdenmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
@@ -57,7 +57,7 @@ namespace BankaAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OdemeLoglari",
+                name: "OdemeLog",
                 columns: table => new
                 {
                     LogId = table.Column<int>(type: "int", nullable: false)
@@ -65,17 +65,17 @@ namespace BankaAPI.Migrations
                     MusteriNo = table.Column<int>(type: "int", nullable: true),
                     OdemeTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     OdemeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Aciklama = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MusteriNoNavigationMusteriNo = table.Column<int>(type: "int", nullable: true)
+                    Aciklama = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OdemeLoglari", x => x.LogId);
+                    table.PrimaryKey("PK_OdemeLog", x => x.LogId);
                     table.ForeignKey(
-                        name: "FK_OdemeLoglari_Musteriler_MusteriNoNavigationMusteriNo",
-                        column: x => x.MusteriNoNavigationMusteriNo,
+                        name: "FK_OdemeLog_Musteriler_MusteriNo",
+                        column: x => x.MusteriNo,
                         principalTable: "Musteriler",
-                        principalColumn: "MusteriNo");
+                        principalColumn: "MusteriNo",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(
@@ -84,9 +84,9 @@ namespace BankaAPI.Migrations
                 column: "MusteriNo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OdemeLoglari_MusteriNoNavigationMusteriNo",
-                table: "OdemeLoglari",
-                column: "MusteriNoNavigationMusteriNo");
+                name: "IX_OdemeLog_MusteriNo",
+                table: "OdemeLog",
+                column: "MusteriNo");
         }
 
         /// <inheritdoc />
@@ -96,7 +96,7 @@ namespace BankaAPI.Migrations
                 name: "Odemeler");
 
             migrationBuilder.DropTable(
-                name: "OdemeLoglari");
+                name: "OdemeLog");
 
             migrationBuilder.DropTable(
                 name: "Musteriler");

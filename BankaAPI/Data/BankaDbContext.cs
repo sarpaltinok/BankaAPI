@@ -30,7 +30,7 @@ namespace BankaAPI.Data
             modelBuilder.Entity<OdemeLog>()
                 .HasOne(l => l.Musteri)
                 .WithMany(m => m.OdemeLog)
-                .HasForeignKey(l => l.MusteriNo)            //degisken isimleri sıkıntı
+                .HasForeignKey(l => l.MusteriNo)            
                 .OnDelete(DeleteBehavior.SetNull);
         }
         

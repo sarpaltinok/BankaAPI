@@ -76,9 +76,6 @@ namespace BankaAPI.Migrations
                     b.Property<int?>("MusteriNo")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MusteriNoNavigationMusteriNo")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("OdemeTarihi")
                         .HasColumnType("datetime2");
 
@@ -87,9 +84,9 @@ namespace BankaAPI.Migrations
 
                     b.HasKey("LogId");
 
-                    b.HasIndex("MusteriNoNavigationMusteriNo");
+                    b.HasIndex("MusteriNo");
 
-                    b.ToTable("OdemeLoglari");
+                    b.ToTable("OdemeLog");
                 });
 
             modelBuilder.Entity("BankaAPI.Models.Odemeler", b =>
@@ -116,7 +113,7 @@ namespace BankaAPI.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("SonOdemeTarihi")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("OdemeId");
 
@@ -127,26 +124,29 @@ namespace BankaAPI.Migrations
 
             modelBuilder.Entity("BankaAPI.Models.OdemeLog", b =>
                 {
-                    b.HasOne("BankaAPI.Models.Musteri", "MusteriNoNavigation")
-                        .WithMany("OdemeLogs")
-                        .HasForeignKey("MusteriNoNavigationMusteriNo");
+                    b.HasOne("BankaAPI.Models.Musteri", "Musteri")
+                        .WithMany("OdemeLog")
+                        .HasForeignKey("MusteriNo")
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.Navigation("MusteriNoNavigation");
+                    b.Navigation("Musteri");
                 });
 
             modelBuilder.Entity("BankaAPI.Models.Odemeler", b =>
                 {
-                    b.HasOne("BankaAPI.Models.Musteri", null)
-                        .WithMany("Odemelers")
+                    b.HasOne("BankaAPI.Models.Musteri", "Musteri")
+                        .WithMany("Odemeler")
                         .HasForeignKey("MusteriNo")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Musteri");
                 });
 
             modelBuilder.Entity("BankaAPI.Models.Musteri", b =>
                 {
-                    b.Navigation("OdemeLogs");
+                    b.Navigation("OdemeLog");
 
-                    b.Navigation("Odemelers");
+                    b.Navigation("Odemeler");
                 });
 #pragma warning restore 612, 618
         }
