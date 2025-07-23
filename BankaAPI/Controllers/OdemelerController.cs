@@ -64,7 +64,7 @@ namespace BankaAPI.Controllers
                     OdemeTarihi = DateTime.Now,
                     Aciklama = "Ödeme bilgileri güncellendi"
                 };
-                _context.OdemeLoglari.Add(log);
+                _context.OdemeLog.Add(log);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -96,7 +96,7 @@ namespace BankaAPI.Controllers
                 OdemeTarihi = DateTime.Now,
                 Aciklama = "Yeni ödeme oluşturuldu"
             };
-            _context.OdemeLoglari.Add(log);
+            _context.OdemeLog.Add(log);
 
             await _context.SaveChangesAsync();
 
@@ -112,7 +112,16 @@ namespace BankaAPI.Controllers
             {
                 return NotFound();
             }
+            //Insert Into Log Table
+            var log = new OdemeLog
+            {
+                MusteriNo = odemeler.MusteriNo,
+                OdemeTutari = odemeler.OdenmisBorcTutari,
+                OdemeTarihi = odemeler.SonOdemeTarihi,
+                Aciklama = "İşlem Silindi"
+            };
 
+            _context.OdemeLog.Add(log);
             _context.Odemeler.Remove(odemeler);
             await _context.SaveChangesAsync();
 

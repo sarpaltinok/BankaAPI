@@ -13,7 +13,7 @@ namespace BankaAPI.Data
 
         public DbSet<Musteri> Musteriler { get; set; }
         public DbSet<Odemeler> Odemeler { get; set; }
-        public DbSet<OdemeLog> OdemeLoglari { get; set; }
+        public DbSet<OdemeLog> OdemeLog { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
