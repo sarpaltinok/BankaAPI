@@ -1,4 +1,4 @@
-﻿using BankaAPI.Models;
+﻿_using BankaAPI.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankaAPI.DTOs
@@ -19,7 +19,5 @@ namespace BankaAPI.DTOs
         public decimal? GecikmisBorcTutari { get; set; }
 
         public decimal? OdenmisBorcTutari { get; set; }
-
-       // public virtual Musteri? MusteriNoNavigation { get; set; }
     }
 }

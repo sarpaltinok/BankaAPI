@@ -17,55 +17,24 @@ namespace BankaAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Musteri entity konfigürasyonu
-            modelBuilder.Entity<Musteri>(entity =>
-            {
-                entity.HasKey(m => m.MusteriNo);
+            base.OnModelCreating(modelBuilder);
 
-                // Decimal property'ler için precision
-                entity.Property(m => m.KrediTutari)
-                    .HasColumnType("decimal(18,2)");
+            //Odemeler -> Musteriler (Many-to-One)
+            modelBuilder.Entity<Odemeler>()
+                .HasOne(o => o.Musteri)
+                .WithMany(m => m.Odemeler)
+                .HasForeignKey(o => o.MusteriNo)
+                .OnDelete(DeleteBehavior.SetNull);
 
-                // Diğer konfigürasyonlar buraya eklenebilir
-            });
-
-            // Odemeler entity konfigürasyonu
-            modelBuilder.Entity<Odemeler>(entity =>
-            {
-                entity.HasKey(o => o.OdemeId);
-
-                // Foreign key ilişkisi
-                entity.HasOne<Musteri>()
-                    .WithMany(m => m.Odemelers)
-                    .HasForeignKey(o => o.MusteriNo)
-                    .OnDelete(DeleteBehavior.SetNull);
-
-                // Decimal property'ler için precision
-                entity.Property(o => o.GuncelOdemeTutari)
-                    .HasColumnType("decimal(18,2)");
-                entity.Property(o => o.GuncelBorcTutari)
-                    .HasColumnType("decimal(18,2)");
-                entity.Property(o => o.GecikmisBorcTutari)
-                    .HasColumnType("decimal(18,2)");
-                entity.Property(o => o.OdenmisBorcTutari)
-                    .HasColumnType("decimal(18,2)");
-
-                // DateOnly yerine DateTime kullanılıyorsa
-                entity.Property(o => o.SonOdemeTarihi)
-                    .HasColumnType("date");
-            });
-
-            // OdemeLog entity konfigürasyonu
-            modelBuilder.Entity<OdemeLog>(entity =>
-            {
-                entity.HasKey(ol => ol.LogId);
-
-                entity.Property(ol => ol.OdemeTutari)
-                    .HasColumnType("decimal(18,2)");
-
-                // Diğer konfigürasyonlar...
-            });
+            //OdemeLog -> Musteriler (Many-to-One)
+            modelBuilder.Entity<OdemeLog>()
+                .HasOne(l => l.Musteri)
+                .WithMany(m => m.OdemeLog)
+                .HasForeignKey(l => l.MusteriNo)            //degisken isimleri sıkıntı
+                .OnDelete(DeleteBehavior.SetNull);
         }
+        
+           
     }
 }
 

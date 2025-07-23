@@ -27,7 +27,9 @@ public partial class Musteri
 
     public decimal? KrediTutari { get; set; }
 
-    public virtual ICollection<OdemeLog> OdemeLogs { get; set; } = new List<OdemeLog>();
+    //Navigation
 
-    public virtual ICollection<Odemeler> Odemelers { get; set; } = new List<Odemeler>();
+    public virtual ICollection<OdemeLog> OdemeLog { get; set; } = new List<OdemeLog>();
+
+    public virtual ICollection<Odemeler> Odemeler { get; set; } = new List<Odemeler>();
 }

@@ -21,5 +21,6 @@ public partial class Odemeler
 
     public decimal? OdenmisBorcTutari { get; set; }
 
-    //public virtual Musteri? MusteriNoNavigation { get; set; }   //Sil
+    // Navigation
+    public Musteri? Musteri { get; set; }
 }

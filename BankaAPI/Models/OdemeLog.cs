@@ -16,4 +16,7 @@ public partial class OdemeLog
     public DateTime? OdemeTarihi { get; set; }
 
     public string? Aciklama { get; set; }
+
+    // Navigation
+    public Musteri? Musteri { get; set; }
 }
