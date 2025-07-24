@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BankaAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class FixNavigationProps : Migration
+    public partial class AddDecimalPrecisions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +25,7 @@ namespace BankaAPI.Migrations
                     Cinsiyet = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DogumTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
                     KayitTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    KrediTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    KrediTutari = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,11 +39,11 @@ namespace BankaAPI.Migrations
                     OdemeId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MusteriNo = table.Column<int>(type: "int", nullable: true),
-                    GuncelOdemeTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    GuncelBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    GuncelOdemeTutari = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
+                    GuncelBorcTutari = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
                     SonOdemeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    GecikmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    OdenmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    GecikmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
+                    OdenmisBorcTutari = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -63,7 +63,7 @@ namespace BankaAPI.Migrations
                     LogId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MusteriNo = table.Column<int>(type: "int", nullable: true),
-                    OdemeTutari = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    OdemeTutari = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
                     OdemeTarihi = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Aciklama = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },

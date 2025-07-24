@@ -32,9 +32,33 @@ namespace BankaAPI.Data
                 .WithMany(m => m.OdemeLog)
                 .HasForeignKey(l => l.MusteriNo)            
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Musteri>()
+                .Property(m => m.KrediTutari)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Odemeler>()
+                .Property(o => o.GuncelOdemeTutari)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Odemeler>()
+               .Property(o => o.GuncelBorcTutari)
+               .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Odemeler>()
+               .Property(o => o.GecikmisBorcTutari)
+               .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Odemeler>()
+               .Property(o => o.OdenmisBorcTutari)
+               .HasPrecision(18, 2);
+            modelBuilder.Entity<OdemeLog>()
+               .Property(o => o.OdemeTutari)
+               .HasPrecision(18, 2);
+
         }
-        
-           
+
+
     }
 }
 

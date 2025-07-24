@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BankaAPI.Data;
 using BankaAPI.Models;
+using BankaAPI.DTOs;
 
 namespace BankaAPI.Controllers
 {
@@ -85,14 +86,14 @@ namespace BankaAPI.Controllers
         // POST: api/Odemeler
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Odemeler>> PostOdemeler(Odemeler odemeler)
+        public async Task<ActionResult<Odemeler>> PostOdemeler(OdemeDto odemeDto)
         {
-            _context.Odemeler.Add(odemeler);           
+            _context.Odemeler.Add(odemeDto);           
             // Insert Into log table
             var log = new OdemeLog
             {
-                MusteriNo = odemeler.MusteriNo,
-                OdemeTutari = odemeler.GuncelOdemeTutari,
+                MusteriNo = odemeDto.MusteriNo,
+                OdemeTutari = odemeDto.GuncelOdemeTutari,
                 OdemeTarihi = DateTime.Now,
                 Aciklama = "Yeni ödeme oluşturuldu"
             };
@@ -100,7 +101,7 @@ namespace BankaAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOdemeler", new { id = odemeler.OdemeId }, odemeler);
+            return CreatedAtAction("GetOdemeler", new { id = odemeDto.OdemeId }, odemeDto);
         }
 
         // DELETE: api/Odemeler/5

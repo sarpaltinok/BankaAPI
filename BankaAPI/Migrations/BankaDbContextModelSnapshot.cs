@@ -46,6 +46,7 @@ namespace BankaAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal?>("KrediTutari")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Soyad")
@@ -80,6 +81,7 @@ namespace BankaAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("OdemeTutari")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("LogId");
@@ -98,18 +100,22 @@ namespace BankaAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OdemeId"));
 
                     b.Property<decimal?>("GecikmisBorcTutari")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("GuncelBorcTutari")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("GuncelOdemeTutari")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("MusteriNo")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("OdenmisBorcTutari")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("SonOdemeTarihi")
