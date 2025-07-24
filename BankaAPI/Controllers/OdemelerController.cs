@@ -46,8 +46,19 @@ namespace BankaAPI.Controllers
         // PUT: api/Odemeler/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutOdemeler(int id, Odemeler odemeler)
+        public async Task<IActionResult> PutOdemeler(int id, OdemeDto odemeDto)
         {
+            var odemeler = new Odemeler
+            {
+                OdemeId = odemeDto.OdemeId,
+                MusteriNo = odemeDto.MusteriNo,
+                GuncelOdemeTutari = odemeDto.GuncelOdemeTutari,
+                GuncelBorcTutari = odemeDto.GuncelBorcTutari,
+                SonOdemeTarihi = odemeDto.SonOdemeTarihi.HasValue ? odemeDto.SonOdemeTarihi.Value.ToDateTime(TimeOnly.MinValue) : (DateTime?)null,
+                GecikmisBorcTutari = odemeDto.GecikmisBorcTutari,
+                OdenmisBorcTutari = odemeDto.OdenmisBorcTutari
+            };
+
             if (id != odemeler.OdemeId)
             {
                 return BadRequest();
@@ -88,7 +99,18 @@ namespace BankaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Odemeler>> PostOdemeler(OdemeDto odemeDto)
         {
-            _context.Odemeler.Add(odemeDto);           
+            var odemeler = new Odemeler
+            {
+                OdemeId = odemeDto.OdemeId,
+                MusteriNo = odemeDto.MusteriNo,
+                GuncelOdemeTutari = odemeDto.GuncelOdemeTutari,
+                GuncelBorcTutari = odemeDto.GuncelBorcTutari,
+                SonOdemeTarihi = odemeDto.SonOdemeTarihi.HasValue ? odemeDto.SonOdemeTarihi.Value.ToDateTime(TimeOnly.MinValue) : (DateTime?)null,
+                GecikmisBorcTutari = odemeDto.GecikmisBorcTutari,
+                OdenmisBorcTutari = odemeDto.OdenmisBorcTutari
+            };
+
+            _context.Odemeler.Add(odemeler);           
             // Insert Into log table
             var log = new OdemeLog
             {
@@ -101,7 +123,7 @@ namespace BankaAPI.Controllers
 
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOdemeler", new { id = odemeDto.OdemeId }, odemeDto);
+            return CreatedAtAction("GetOdemeler", new { id = odemeler.OdemeId }, odemeler);
         }
 
         // DELETE: api/Odemeler/5
