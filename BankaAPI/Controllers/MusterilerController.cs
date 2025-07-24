@@ -23,7 +23,7 @@ namespace BankaAPI.Controllers
 
         // GET: api/Musteriler
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MusteriOkuDto>>> GetMusteriler()   //Burdan başla
+        public async Task<ActionResult<IEnumerable<MusteriOkuDto>>> GetMusteriler()   
         {
             var musteriler = await _context.Musteriler.ToListAsync();
 
